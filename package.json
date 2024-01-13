@@ -27,11 +27,6 @@
     "node",
     "binding"
   ],
-  "files": [
-    "index.js",
-    "index.d.ts",
-    "*.node"
-  ],
   "license": "MIT",
   "devDependencies": {
     "@napi-rs/cli": "^2.17.0"
