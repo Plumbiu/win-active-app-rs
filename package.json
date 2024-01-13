@@ -27,6 +27,11 @@
     "node",
     "binding"
   ],
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "./*.node"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Plumbiu/win-active-app-rs.git"
