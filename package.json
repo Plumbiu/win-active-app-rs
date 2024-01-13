@@ -15,6 +15,16 @@
       ]
     }
   },
+  "keywords": [
+    "napi",
+    "rust",
+    "rs",
+    "windows",
+    "win",
+    "winapi",
+    "app",
+    "application"
+  ],
   "files": [
     "index.js",
     "index.d.ts",
