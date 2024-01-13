@@ -31,6 +31,10 @@
     "type": "git",
     "url": "git+https://github.com/Plumbiu/win-active-app-rs.git"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "license": "MIT",
   "devDependencies": {
     "@napi-rs/cli": "^2.17.0"
