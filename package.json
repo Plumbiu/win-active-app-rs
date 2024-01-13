@@ -27,6 +27,10 @@
     "node",
     "binding"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Plumbiu/win-active-app-rs.git"
+  },
   "license": "MIT",
   "devDependencies": {
     "@napi-rs/cli": "^2.17.0"
