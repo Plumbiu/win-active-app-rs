@@ -23,7 +23,9 @@
     "win",
     "winapi",
     "app",
-    "application"
+    "application",
+    "node",
+    "binding"
   ],
   "files": [
     "index.js",
