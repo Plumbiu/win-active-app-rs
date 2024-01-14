@@ -1,4 +1,4 @@
-const { getCurrentAppPath, getCachedApps } = require('../index.js')
+import { getCurrentAppPath, getCachedApps } from '../index.js'
 
 console.log(getCachedApps())
 

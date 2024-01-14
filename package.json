@@ -3,6 +3,7 @@
   "version": "0.0.5",
   "main": "index.js",
   "types": "index.d.ts",
+  "type": "module",
   "author": "Plumbiu",
   "napi": {
     "name": "win-active-app-rs",
@@ -49,7 +50,7 @@
   },
   "scripts": {
     "artifacts": "napi artifacts",
-    "build": "napi build --platform --release",
+    "build": "napi build --platform --release --js=false",
     "build:debug": "napi build --platform",
     "prepublishOnly": "napi prepublish -t npm",
     "universal": "napi universal",

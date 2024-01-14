@@ -2,36 +2,26 @@
 #![allow(unused)]
 use napi_derive::napi;
 use std::collections::HashMap;
-use sysinfo::{Components, Disks, Networks, System};
-use windows::Win32::UI::WindowsAndMessaging::{
-  GetForegroundWindow, GetWindowModuleFileNameW, GetWindowThreadProcessId,
-};
+use std::ffi::OsString;
+use std::os::windows::ffi::OsStringExt;
+use windows::Win32::Foundation::{HINSTANCE, MAX_PATH};
+use windows::Win32::System::ProcessStatus::GetModuleFileNameExW;
+use windows::Win32::System::Threading::{OpenProcess, PROCESS_QUERY_INFORMATION, PROCESS_VM_READ};
+use windows::Win32::UI::WindowsAndMessaging::{GetForegroundWindow, GetWindowThreadProcessId};
 use winreg::enums::HKEY_CLASSES_ROOT;
 use winreg::RegKey;
 
-fn get_all_process() -> HashMap<u32, String> {
-  let mut sys = System::new_all();
-  sys.refresh_all();
-  let mut map: HashMap<u32, String> = HashMap::new();
-  for (pid, p) in sys.processes() {
-    if let Some(exe) = p.exe() {
-      map.insert(
-        pid.as_u32(),
-        exe.to_string_lossy().to_string().to_lowercase(),
-      );
-    }
-  }
-  map
-}
-
 #[napi]
-fn get_current_app_path() -> Option<String> {
+fn get_current_app_path() -> String {
   unsafe {
+    let options = PROCESS_QUERY_INFORMATION | PROCESS_VM_READ;
     let hwd = GetForegroundWindow();
-    let mut pid = 0;
+    let mut pid: u32 = 0;
     GetWindowThreadProcessId(hwd, Some(&mut pid));
-    let all_process = get_all_process();
-    all_process.get(&pid).cloned()
+    let handle = OpenProcess(options, false, pid).unwrap_or_default();
+    let mut exe_buffer = [0u16; MAX_PATH as usize + 1];
+    GetModuleFileNameExW(handle, HINSTANCE::default(), exe_buffer.as_mut_slice());
+    OsString::from_wide(&exe_buffer).to_string_lossy().to_string()
   }
 }
 
