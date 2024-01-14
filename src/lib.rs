@@ -9,9 +9,6 @@ use windows::Win32::UI::WindowsAndMessaging::{
 use winreg::enums::HKEY_CLASSES_ROOT;
 use winreg::RegKey;
 
-const APP_NAME_SUFFIX: &str = ".FriendlyAppName";
-const EXE_SUFFIX: &str = ".exe.FriendlyAppName";
-
 fn get_all_process() -> HashMap<u32, String> {
   let mut sys = System::new_all();
   sys.refresh_all();
@@ -38,6 +35,10 @@ fn get_current_app_path() -> Option<String> {
   }
 }
 
+const APP_NAME_SUFFIX: &str = ".FriendlyAppName";
+const EXE_SUFFIX: &str = ".exe.FriendlyAppName";
+const SYSTEM_BINEXE_PERFIX: &str = "C:\\Windows";
+
 #[napi]
 fn get_cached_apps() -> HashMap<String, String> {
   let system = RegKey::predef(HKEY_CLASSES_ROOT)
@@ -45,7 +46,7 @@ fn get_cached_apps() -> HashMap<String, String> {
     .unwrap();
   let mut apps: HashMap<String, String> = HashMap::new();
   for (name, value) in system.enum_values().map(|x| x.unwrap()) {
-    if name.ends_with(EXE_SUFFIX) {
+    if name.ends_with(EXE_SUFFIX) && !name.starts_with(SYSTEM_BINEXE_PERFIX) {
       apps.insert(
         name.replace(APP_NAME_SUFFIX, "").to_lowercase(),
         value.to_string(),
