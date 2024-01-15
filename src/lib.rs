@@ -4,12 +4,22 @@ use napi_derive::napi;
 use std::collections::HashMap;
 use std::ffi::OsString;
 use std::os::windows::ffi::OsStringExt;
+use std::path::PathBuf;
 use windows::Win32::Foundation::{HINSTANCE, MAX_PATH};
 use windows::Win32::System::ProcessStatus::GetModuleFileNameExW;
 use windows::Win32::System::Threading::{OpenProcess, PROCESS_QUERY_INFORMATION, PROCESS_VM_READ};
 use windows::Win32::UI::WindowsAndMessaging::{GetForegroundWindow, GetWindowThreadProcessId};
 use winreg::enums::HKEY_CLASSES_ROOT;
 use winreg::RegKey;
+
+unsafe fn null_terminated_wchar_to_string(slice: &[u16]) -> String {
+  match slice.iter().position(|&x| x == 0) {
+    Some(pos) => OsString::from_wide(&slice[..pos])
+      .to_string_lossy()
+      .into_owned(),
+    None => OsString::from_wide(slice).to_string_lossy().into_owned(),
+  }
+}
 
 #[napi]
 fn get_current_app_path() -> String {
@@ -21,7 +31,7 @@ fn get_current_app_path() -> String {
     let handle = OpenProcess(options, false, pid).unwrap_or_default();
     let mut exe_buffer = [0u16; MAX_PATH as usize + 1];
     GetModuleFileNameExW(handle, HINSTANCE::default(), exe_buffer.as_mut_slice());
-    OsString::from_wide(&exe_buffer).to_string_lossy().to_string()
+    null_terminated_wchar_to_string(&exe_buffer)
   }
 }
 
