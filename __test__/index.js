@@ -2,4 +2,5 @@ import { getCurrentAppPath, getCachedApps } from '../index.js'
 
 console.log(getCachedApps())
 
-console.log(getCurrentAppPath())
+const appPath = getCurrentAppPath()
+console.log(appPath, appPath.length)
