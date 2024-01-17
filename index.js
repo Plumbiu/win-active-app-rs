@@ -30,6 +30,6 @@ if (!nativeBinding) {
   throw new Error('Failed to load native binding')
 }
 
-const { getCurrentAppPath, getCachedApps } = nativeBinding
+const { getCurrentApp, getAppIcon } = nativeBinding
 
-export { getCurrentAppPath, getCachedApps }
+export { getCurrentApp, getAppIcon }
