@@ -104,8 +104,14 @@ fn get_process_name_from_path(process_path: &String) -> Result<String, ()> {
   return Ok(file_description);
 }
 
+#[napi(object)]
+pub struct APP {
+  pub name: String,
+  pub path: String,
+}
+
 #[napi]
-fn get_current_app() -> String {
+fn get_current_app() -> APP {
   unsafe {
     let options = PROCESS_QUERY_INFORMATION | PROCESS_VM_READ;
     let hwd = GetForegroundWindow();
@@ -115,7 +121,10 @@ fn get_current_app() -> String {
     let mut exe_buffer = [0u16; MAX_PATH as usize + 1];
     GetModuleFileNameExW(handle, HINSTANCE::default(), exe_buffer.as_mut_slice());
     let app_path = null_terminated_wchar_to_string(&exe_buffer);
-    get_process_name_from_path(&app_path).unwrap_or("".to_string())
+    APP {
+      name: get_process_name_from_path(&app_path).unwrap_or("".to_string()),
+      path: app_path,
+    }
   }
 }
 

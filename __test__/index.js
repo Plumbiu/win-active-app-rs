@@ -1,3 +1,5 @@
 import { getCurrentApp } from '../index.js'
 
-console.log(getCurrentApp())
+setInterval(() => {
+  console.log(getCurrentApp())
+}, 1000)

@@ -1,13 +1,10 @@
 // https://github.com/rubickCenter/rubick-native/blob/main/LICENSE
 mod dib;
-
 use base64::{engine::general_purpose, Engine};
-
 use napi_derive::napi;
-use pelite::Error::Bounds;
 use pelite::{
-  self,
   resources::{FindError, Resources},
+  Error::Bounds,
   FileMap, PeFile,
 };
 
